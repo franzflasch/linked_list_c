@@ -12,6 +12,7 @@ typedef struct list_node_struct
 typedef struct linked_list_struct
 {
     list_node_td *head;
+    int count;
 
 } linked_list_td;
 

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unity.h>
 #include <linked_list.h>
 
@@ -83,6 +84,61 @@ void test_remove_first_node(void)
     TEST_ASSERT_NULL(my_list.head);
 }
 
+void free_test_data(void *data) { free(data); }
+
+void test_add_data_nodes(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    /* initialize test list */
+    linked_list_td my_list = { 0 };
+
+    /* Now allocate some data for putting into the list */
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+
+    /* Add the data to the list, don't forget to add a free function
+       so the internal list function can free it for you
+     */
+    llist.append(&my_list, test_node, free_test_data);
+
+    /* It's also possible to add data to the list which is allocated on the stack.
+       Be aware that it the list node will point to garbage if the data goes out of
+       scope.
+     */
+    my_test_data_td test_node2 = { 45, 46, 47};
+    llist.append(&my_list, &test_node2, NULL);
+
+    /* Now check if we can get the data back from the list */
+    my_test_data_td *test_data = llist.get_first(&my_list);
+    TEST_ASSERT_EQUAL(42, test_data->x);
+    TEST_ASSERT_EQUAL(43, test_data->y);
+    TEST_ASSERT_EQUAL(44, test_data->blabla);
+
+    /* Remove first node */
+    llist.remove_front(&my_list);
+
+    /* Now get the secont node, with the data allocated on the stack */
+    test_data = llist.get_first(&my_list);
+    TEST_ASSERT_EQUAL(45, test_data->x);
+    TEST_ASSERT_EQUAL(46, test_data->y);
+    TEST_ASSERT_EQUAL(47, test_data->blabla);
+
+    /* This will destroy all nodes and frees all data automatically, if
+       a free function was given.
+     */
+    llist.destroy(&my_list);
+    llist.print(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -101,5 +157,6 @@ int main(void)
     RUN_TEST(test_remove_middle_node);
     RUN_TEST(test_remove_last_node);
     RUN_TEST(test_remove_first_node);
+    RUN_TEST(test_add_data_nodes);
     return UNITY_END();
 }
