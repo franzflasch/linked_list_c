@@ -136,7 +136,50 @@ void test_add_data_nodes(void)
        a free function was given.
      */
     llist.destroy(&my_list);
-    llist.print(&my_list);
+}
+
+void test_get_last(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 51;
+    test_node->y = 52;
+    test_node->blabla = 53;
+    llist.append(&my_list, test_node, free_test_data);
+
+    my_test_data_td *test_data = llist.get_last(&my_list);
+    TEST_ASSERT_EQUAL(51, test_data->x);
+    TEST_ASSERT_EQUAL(52, test_data->y);
+    TEST_ASSERT_EQUAL(53, test_data->blabla);
+
+    llist.destroy(&my_list);
 }
 
 void setUp(void)
@@ -158,5 +201,6 @@ int main(void)
     RUN_TEST(test_remove_last_node);
     RUN_TEST(test_remove_first_node);
     RUN_TEST(test_add_data_nodes);
+    RUN_TEST(test_get_last);
     return UNITY_END();
 }

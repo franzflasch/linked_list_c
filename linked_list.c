@@ -13,6 +13,7 @@ static void linked_list_remove_entry(linked_list_td *list, void *entry)
         if(*curr == list_entry) break;
         curr = &(*curr)->next;
     }
+    if(i==list->count) return;
     *curr = list_entry->next;
     if(list_entry->free_func != NULL)
         list_entry->free_func(list_entry->data);
@@ -23,6 +24,17 @@ static void linked_list_remove_entry(linked_list_td *list, void *entry)
 static void *linked_list_get_first(linked_list_td *list)
 {
     return list->head->data;
+}
+
+static void *linked_list_get_last(linked_list_td *list)
+{
+    int i = 0;
+    list_node_td *curr = list->head;
+    if(list->head == NULL)
+        return NULL;
+    for(i=0;i<(list->count-1);i++)
+        curr = curr->next;
+    return curr->data;
 }
 
 static void linked_list_remove_front(linked_list_td *list)
@@ -97,5 +109,6 @@ linked_list_interface_td llist =
     .destroy = linked_list_destroy,
     .count = linked_list_count,
     .get_first = linked_list_get_first,
+    .get_last = linked_list_get_last,
     .print = linked_list_print,
 };
