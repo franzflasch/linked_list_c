@@ -5,19 +5,30 @@
 
 static void linked_list_remove_entry(linked_list_td *list, void *entry)
 {
-    int i = 0;
-    list_node_td **curr = &list->head;
-    list_node_td *list_entry = entry;
-    for(i=0;i<list->count;i++)
+    list_node_td *curr = entry;
+    list_node_td *tmp = NULL;
+
+    if(entry == list->head)
+        list->head = curr->next;
+
+    if(entry == list->tail)
+        list->tail = curr->prev;
+
+    tmp = curr->prev;
+    if(tmp != NULL)
+        tmp->next = curr->next;
+
+    tmp = curr->next;
+    if(tmp != NULL)
+        tmp->prev = curr->prev;
+
+    if(curr->free_func)
     {
-        if(*curr == list_entry) break;
-        curr = &(*curr)->next;
+        curr->free_func(curr->data);
+        curr->free_func = NULL;
+        curr->data = NULL;
     }
-    if(i==list->count) return;
-    *curr = list_entry->next;
-    if(list_entry->free_func != NULL)
-        list_entry->free_func(list_entry->data);
-    free(list_entry);
+    free(curr);
     list->count--;
 }
 
@@ -28,13 +39,7 @@ static void *linked_list_get_first(linked_list_td *list)
 
 static void *linked_list_get_last(linked_list_td *list)
 {
-    int i = 0;
-    list_node_td *curr = list->head;
-    if(list->head == NULL)
-        return NULL;
-    for(i=0;i<(list->count-1);i++)
-        curr = curr->next;
-    return curr->data;
+    return list->tail->data;
 }
 
 static void linked_list_remove_front(linked_list_td *list)
@@ -42,16 +47,30 @@ static void linked_list_remove_front(linked_list_td *list)
     linked_list_remove_entry(list, list->head);
 }
 
+static void linked_list_remove_last(linked_list_td *list)
+{
+    linked_list_remove_entry(list, list->tail);
+}
+
 static void *linked_list_append(linked_list_td *list, void *node_data, void (*free_func)(void *data))
 {
-    int i = 0;
-    list_node_td **curr = &list->head;
+    list_node_td *curr = list->tail;
     list_node_td *node = calloc(1, sizeof(list_node_td));
     node->data = node_data;
     node->free_func = free_func;
-    for(i=0;i<list->count;i++)
-        curr = &(*curr)->next;
-    *curr = node;
+
+    if(list->count == 0)
+    {
+        list->head = node;
+        list->tail = node;
+    }
+    else
+    {
+        curr->next = node;
+        node->prev = curr;
+        list->tail = node;
+    }
+
     list->count++;
     return node;
 }
@@ -59,24 +78,18 @@ static void *linked_list_append(linked_list_td *list, void *node_data, void (*fr
 static void linked_list_destroy(linked_list_td *list)
 {
     int i = 0;
+    int count = list->count;
     list_node_td *curr = list->head;
     list_node_td *prev = NULL;
     if(list->head == NULL) return;
-    for(i=0;i<list->count;i++)
+    for(i=0;i<count;i++)
     {
         prev = curr;
         curr = curr->next;
-        if(prev->free_func)
-        {
-            prev->free_func(prev->data);
-            prev->free_func = NULL;
-            prev->data = NULL;
-        }
-        free(prev);
-        prev = NULL;
+        linked_list_remove_entry(list, prev);
     }
     list->head = NULL;
-    list->count = 0;
+    list->tail = NULL;
 }
 
 static int linked_list_count(linked_list_td *list)
@@ -105,6 +118,7 @@ linked_list_interface_td llist =
 {
     .remove_entry = linked_list_remove_entry,
     .remove_front = linked_list_remove_front,
+    .remove_last = linked_list_remove_last,
     .append = linked_list_append,
     .destroy = linked_list_destroy,
     .count = linked_list_count,

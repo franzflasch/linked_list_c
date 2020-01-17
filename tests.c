@@ -6,11 +6,14 @@
 void test_remove_first_single_node(void)
 {
     linked_list_td my_list = { 0 };
+
     llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_EQUAL(1, llist.count(&my_list));
+
     llist.remove_front(&my_list);
     TEST_ASSERT_NULL(my_list.head);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
+
     llist.destroy(&my_list);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
     TEST_ASSERT_NULL(my_list.head);
@@ -20,14 +23,18 @@ void test_remove_second_node(void)
 {
     linked_list_td my_list = { 0 };
     void *second_node = 0;
+
     llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_EQUAL(1, llist.count(&my_list));
+
     second_node = llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_NOT_NULL(my_list.head);
     TEST_ASSERT_NOT_NULL(second_node);
     TEST_ASSERT_EQUAL(2, llist.count(&my_list));
+
     llist.remove_entry(&my_list, second_node);
     TEST_ASSERT_EQUAL(1, llist.count(&my_list));
+
     llist.destroy(&my_list);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
     TEST_ASSERT_NULL(my_list.head);
@@ -37,13 +44,16 @@ void test_remove_middle_node(void)
 {
     linked_list_td my_list = { 0 };
     void *tmp_node = 0;
+
     llist.append(&my_list, NULL, NULL);
     tmp_node = llist.append(&my_list, NULL, NULL);
     llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_NOT_NULL(tmp_node);
     TEST_ASSERT_EQUAL(3, llist.count(&my_list));
+
     llist.remove_entry(&my_list, tmp_node);
     TEST_ASSERT_EQUAL(2, llist.count(&my_list));
+
     llist.destroy(&my_list);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
     TEST_ASSERT_NULL(my_list.head);
@@ -53,13 +63,16 @@ void test_remove_last_node(void)
 {
     linked_list_td my_list = { 0 };
     void *tmp_node = 0;
+
     llist.append(&my_list, NULL, NULL);
     llist.append(&my_list, NULL, NULL);
     tmp_node = llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_NOT_NULL(tmp_node);
     TEST_ASSERT_EQUAL(3, llist.count(&my_list));
+
     llist.remove_entry(&my_list, tmp_node);
     TEST_ASSERT_EQUAL(2, llist.count(&my_list));
+
     llist.destroy(&my_list);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
     TEST_ASSERT_NULL(my_list.head);
@@ -69,16 +82,20 @@ void test_remove_first_node(void)
 {
     linked_list_td my_list = { 0 };
     void *tmp_node = 0;
+
     llist.append(&my_list, NULL, NULL);
     tmp_node = llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_NOT_NULL(tmp_node);
+
     llist.append(&my_list, NULL, NULL);
     TEST_ASSERT_EQUAL(3, llist.count(&my_list));
+
     llist.remove_entry(&my_list, my_list.head);
     TEST_ASSERT_EQUAL(2, llist.count(&my_list));
     TEST_ASSERT_NOT_NULL(tmp_node);
     TEST_ASSERT_NOT_NULL(my_list.head);
     TEST_ASSERT_EQUAL(my_list.head, tmp_node);
+
     llist.destroy(&my_list);
     TEST_ASSERT_EQUAL(0, llist.count(&my_list));
     TEST_ASSERT_NULL(my_list.head);
@@ -182,6 +199,169 @@ void test_get_last(void)
     llist.destroy(&my_list);
 }
 
+void test_remove_first(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    void *tmp_node = llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 51;
+    test_node->y = 52;
+    test_node->blabla = 53;
+    llist.append(&my_list, test_node, free_test_data);
+
+    llist.remove_front(&my_list);
+    TEST_ASSERT_EQUAL(my_list.head, tmp_node);
+
+    llist.destroy(&my_list);
+}
+
+void test_remove_last(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    void *tmp_node = llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 51;
+    test_node->y = 52;
+    test_node->blabla = 53;
+    llist.append(&my_list, test_node, free_test_data);
+
+    llist.remove_last(&my_list);
+    TEST_ASSERT_EQUAL(my_list.tail, tmp_node);
+
+    llist.destroy(&my_list);
+}
+
+void test_remove_front_last(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    void *tmp_node = llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    llist.remove_last(&my_list);
+    llist.remove_front(&my_list);
+    TEST_ASSERT_EQUAL(my_list.tail, tmp_node);
+    TEST_ASSERT_EQUAL(my_list.head, tmp_node);
+    TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
+
+    llist.destroy(&my_list);
+}
+
+void test_remove_all(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    llist.remove_last(&my_list);
+    llist.remove_front(&my_list);
+    llist.remove_front(&my_list);
+    TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
+    TEST_ASSERT_NULL(my_list.head)
+    TEST_ASSERT_NULL(my_list.tail)
+
+    llist.destroy(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -202,5 +382,9 @@ int main(void)
     RUN_TEST(test_remove_first_node);
     RUN_TEST(test_add_data_nodes);
     RUN_TEST(test_get_last);
+    RUN_TEST(test_remove_first);
+    RUN_TEST(test_remove_last);
+    RUN_TEST(test_remove_front_last);
+    RUN_TEST(test_remove_all);
     return UNITY_END();
 }
