@@ -495,6 +495,27 @@ void test_append(void)
     llist.destroy(&my_list);
 }
 
+void test_get_empty_list(void)
+{
+    int *test_data = calloc(1, sizeof(int));
+    int *test_ptr = NULL;
+    *test_data = 42;
+    linked_list_td my_list = { 0 };
+    test_ptr = llist.get_first(&my_list);
+    TEST_ASSERT_NULL(test_ptr);
+
+    test_ptr = llist.get_last(&my_list);
+    TEST_ASSERT_NULL(test_ptr);
+
+    /* Now add one item and check */
+    llist.append(&my_list, test_data, free);
+    test_ptr = llist.get_first(&my_list);
+    TEST_ASSERT_NOT_NULL(test_ptr);
+    TEST_ASSERT_EQUAL(42, *test_ptr);
+
+    llist.destroy(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -521,5 +542,6 @@ int main(void)
     RUN_TEST(test_remove_all);
     RUN_TEST(test_prepend);
     RUN_TEST(test_append);
+    RUN_TEST(test_get_empty_list);
     return UNITY_END();
 }

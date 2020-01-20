@@ -34,11 +34,13 @@ static void linked_list_remove_entry(linked_list_td *list, void *entry)
 
 static void *linked_list_get_first(linked_list_td *list)
 {
+    if((list->head == NULL) || (list->head->data == NULL)) return NULL;
     return list->head->data;
 }
 
 static void *linked_list_get_last(linked_list_td *list)
 {
+    if((list->tail == NULL) || (list->tail->data == NULL)) return NULL;
     return list->tail->data;
 }
 
