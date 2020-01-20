@@ -8,6 +8,9 @@ static void linked_list_remove_entry(linked_list_td *list, void *entry)
     list_node_td *curr = entry;
     list_node_td *tmp = NULL;
 
+    if(entry == NULL)
+        return;
+
     if(entry == list->head)
         list->head = curr->next;
 

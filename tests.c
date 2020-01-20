@@ -507,6 +507,10 @@ void test_get_empty_list(void)
     test_ptr = llist.get_last(&my_list);
     TEST_ASSERT_NULL(test_ptr);
 
+    /* Try to remove empty list */
+    llist.remove_front(&my_list);
+    llist.remove_last(&my_list);
+
     /* Now add one item and check */
     llist.append(&my_list, test_data, free);
     test_ptr = llist.get_first(&my_list);
