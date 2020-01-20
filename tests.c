@@ -362,6 +362,139 @@ void test_remove_all(void)
     llist.destroy(&my_list);
 }
 
+void test_prepend(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+    my_test_data_td *test_data = NULL;
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    /* check for first entry*/
+    test_data = llist.get_first(&my_list);
+    TEST_ASSERT_EQUAL(42, test_data->x);
+    TEST_ASSERT_EQUAL(43, test_data->y);
+    TEST_ASSERT_EQUAL(44, test_data->blabla);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 123;
+    test_node->y = 456;
+    test_node->blabla = 789;
+    llist.prepend(&my_list, test_node, free_test_data);
+
+    /* now check for first entry again */
+    test_data = llist.get_first(&my_list);
+    TEST_ASSERT_EQUAL(123, test_data->x);
+    TEST_ASSERT_EQUAL(456, test_data->y);
+    TEST_ASSERT_EQUAL(789, test_data->blabla);
+
+    llist.remove_last(&my_list);
+    llist.remove_last(&my_list);
+    llist.remove_front(&my_list);
+    llist.remove_front(&my_list);
+    TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
+    TEST_ASSERT_NULL(my_list.head)
+    TEST_ASSERT_NULL(my_list.tail)
+
+    llist.destroy(&my_list);
+}
+
+void test_append(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+    my_test_data_td *test_data = NULL;
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    /* check for first entry*/
+    test_data = llist.get_first(&my_list);
+    TEST_ASSERT_EQUAL(42, test_data->x);
+    TEST_ASSERT_EQUAL(43, test_data->y);
+    TEST_ASSERT_EQUAL(44, test_data->blabla);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 123;
+    test_node->y = 456;
+    test_node->blabla = 789;
+    llist.prepend(&my_list, test_node, free_test_data);
+
+    /* now check for last entry */
+    test_data = llist.get_last(&my_list);
+    TEST_ASSERT_EQUAL(48, test_data->x);
+    TEST_ASSERT_EQUAL(49, test_data->y);
+    TEST_ASSERT_EQUAL(50, test_data->blabla);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 345;
+    test_node->y = 678;
+    test_node->blabla = 234;
+    llist.append(&my_list, test_node, free_test_data);
+
+    /* now check for last entry again */
+    test_data = llist.get_last(&my_list);
+    TEST_ASSERT_EQUAL(345, test_data->x);
+    TEST_ASSERT_EQUAL(678, test_data->y);
+    TEST_ASSERT_EQUAL(234, test_data->blabla);
+
+    llist.remove_last(&my_list);
+    llist.remove_last(&my_list);
+    llist.remove_front(&my_list);
+    llist.remove_front(&my_list);
+    llist.remove_front(&my_list);
+    TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
+    TEST_ASSERT_NULL(my_list.head)
+    TEST_ASSERT_NULL(my_list.tail)
+
+    llist.destroy(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -386,5 +519,7 @@ int main(void)
     RUN_TEST(test_remove_last);
     RUN_TEST(test_remove_front_last);
     RUN_TEST(test_remove_all);
+    RUN_TEST(test_prepend);
+    RUN_TEST(test_append);
     return UNITY_END();
 }
