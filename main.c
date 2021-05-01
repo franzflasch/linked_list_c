@@ -43,14 +43,16 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) **argv)
     llist.print(&my_list);
 
     /* Now check if we can get the data back from the list */
-    my_test_data_td *test_data = llist.get_first(&my_list);
+    list_node_td *list_node = llist.get_first(&my_list);
+    my_test_data_td *test_data = list_node->data;
     printf("%d %d %d\n", test_data->x, test_data->y, test_data->blabla);
 
     /* Remove first node */
     llist.remove_front(&my_list);
 
     /* Now get the secont node, with the data allocated on the stack */
-    test_data = llist.get_first(&my_list);
+    list_node = llist.get_first(&my_list);
+    test_data = list_node->data;
     printf("%d %d %d\n", test_data->x, test_data->y, test_data->blabla);
 
     /* This will destroy all nodes and frees all data automatically, if

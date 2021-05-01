@@ -135,7 +135,8 @@ void test_add_data_nodes(void)
     llist.append(&my_list, &test_node2, NULL);
 
     /* Now check if we can get the data back from the list */
-    my_test_data_td *test_data = llist.get_first(&my_list);
+    list_node_td *list_node = llist.get_first(&my_list);
+    my_test_data_td *test_data = list_node->data;
     TEST_ASSERT_EQUAL(42, test_data->x);
     TEST_ASSERT_EQUAL(43, test_data->y);
     TEST_ASSERT_EQUAL(44, test_data->blabla);
@@ -144,7 +145,8 @@ void test_add_data_nodes(void)
     llist.remove_front(&my_list);
 
     /* Now get the secont node, with the data allocated on the stack */
-    test_data = llist.get_first(&my_list);
+    list_node = llist.get_first(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(45, test_data->x);
     TEST_ASSERT_EQUAL(46, test_data->y);
     TEST_ASSERT_EQUAL(47, test_data->blabla);
@@ -191,7 +193,8 @@ void test_get_last(void)
     test_node->blabla = 53;
     llist.append(&my_list, test_node, free_test_data);
 
-    my_test_data_td *test_data = llist.get_last(&my_list);
+    list_node_td *list_node = llist.get_last(&my_list);
+    my_test_data_td *test_data = list_node->data;
     TEST_ASSERT_EQUAL(51, test_data->x);
     TEST_ASSERT_EQUAL(52, test_data->y);
     TEST_ASSERT_EQUAL(53, test_data->blabla);
@@ -394,7 +397,8 @@ void test_prepend(void)
     llist.append(&my_list, test_node, free_test_data);
 
     /* check for first entry*/
-    test_data = llist.get_first(&my_list);
+    list_node_td *list_node = llist.get_first(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(42, test_data->x);
     TEST_ASSERT_EQUAL(43, test_data->y);
     TEST_ASSERT_EQUAL(44, test_data->blabla);
@@ -406,7 +410,8 @@ void test_prepend(void)
     llist.prepend(&my_list, test_node, free_test_data);
 
     /* now check for first entry again */
-    test_data = llist.get_first(&my_list);
+    list_node = llist.get_first(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(123, test_data->x);
     TEST_ASSERT_EQUAL(456, test_data->y);
     TEST_ASSERT_EQUAL(789, test_data->blabla);
@@ -454,7 +459,8 @@ void test_append(void)
     llist.append(&my_list, test_node, free_test_data);
 
     /* check for first entry*/
-    test_data = llist.get_first(&my_list);
+    list_node_td *list_node = llist.get_first(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(42, test_data->x);
     TEST_ASSERT_EQUAL(43, test_data->y);
     TEST_ASSERT_EQUAL(44, test_data->blabla);
@@ -466,7 +472,8 @@ void test_append(void)
     llist.prepend(&my_list, test_node, free_test_data);
 
     /* now check for last entry */
-    test_data = llist.get_last(&my_list);
+    list_node = llist.get_last(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(48, test_data->x);
     TEST_ASSERT_EQUAL(49, test_data->y);
     TEST_ASSERT_EQUAL(50, test_data->blabla);
@@ -478,7 +485,8 @@ void test_append(void)
     llist.append(&my_list, test_node, free_test_data);
 
     /* now check for last entry again */
-    test_data = llist.get_last(&my_list);
+    list_node = llist.get_last(&my_list);
+    test_data = list_node->data;
     TEST_ASSERT_EQUAL(345, test_data->x);
     TEST_ASSERT_EQUAL(678, test_data->y);
     TEST_ASSERT_EQUAL(234, test_data->blabla);
@@ -498,14 +506,13 @@ void test_append(void)
 void test_get_empty_list(void)
 {
     int *test_data = calloc(1, sizeof(int));
-    int *test_ptr = NULL;
     *test_data = 42;
     linked_list_td my_list = { 0 };
-    test_ptr = llist.get_first(&my_list);
-    TEST_ASSERT_NULL(test_ptr);
+    list_node_td *list_node = llist.get_first(&my_list);
+    TEST_ASSERT_NULL(list_node);
 
-    test_ptr = llist.get_last(&my_list);
-    TEST_ASSERT_NULL(test_ptr);
+    list_node = llist.get_last(&my_list); 
+    TEST_ASSERT_NULL(list_node);
 
     /* Try to remove empty list */
     llist.remove_front(&my_list);
@@ -513,9 +520,73 @@ void test_get_empty_list(void)
 
     /* Now add one item and check */
     llist.append(&my_list, test_data, free);
-    test_ptr = llist.get_first(&my_list);
+    list_node = llist.get_first(&my_list);
+    int *test_ptr = list_node->data;
     TEST_ASSERT_NOT_NULL(test_ptr);
     TEST_ASSERT_EQUAL(42, *test_ptr);
+
+    llist.destroy(&my_list);
+}
+
+void test_get_from_index(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td *test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 42;
+    test_node->y = 43;
+    test_node->blabla = 44;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 45;
+    test_node->y = 46;
+    test_node->blabla = 47;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 48;
+    test_node->y = 49;
+    test_node->blabla = 50;
+    llist.append(&my_list, test_node, free_test_data);
+
+    test_node = calloc(1, sizeof(my_test_data_td));
+    test_node->x = 51;
+    test_node->y = 52;
+    test_node->blabla = 53;
+    llist.append(&my_list, test_node, free_test_data);
+
+    list_node_td *list_node = llist.get_from_index(&my_list, 2);
+    my_test_data_td *tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(48, tmp_data->x);
+    TEST_ASSERT_EQUAL(49, tmp_data->y);
+    TEST_ASSERT_EQUAL(50, tmp_data->blabla);
+
+    list_node = llist.get_from_index(&my_list, 1);
+    tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(45, tmp_data->x);
+    TEST_ASSERT_EQUAL(46, tmp_data->y);
+    TEST_ASSERT_EQUAL(47, tmp_data->blabla);
+
+    /* Now remove one node */
+    llist.remove_entry(&my_list, list_node);
+
+    /* The last node was deleted, so when now trying to get index 1 we should get the same data
+     * as we had when using index 2 before
+     */
+    list_node = llist.get_from_index(&my_list, 1);
+    tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(48, tmp_data->x);
+    TEST_ASSERT_EQUAL(49, tmp_data->y);
+    TEST_ASSERT_EQUAL(50, tmp_data->blabla);
 
     llist.destroy(&my_list);
 }
@@ -533,6 +604,7 @@ void tearDown(void)
 int main(void)
 {
     UNITY_BEGIN();
+
     RUN_TEST(test_remove_first_single_node);
     RUN_TEST(test_remove_second_node);
     RUN_TEST(test_remove_middle_node);
@@ -547,5 +619,7 @@ int main(void)
     RUN_TEST(test_prepend);
     RUN_TEST(test_append);
     RUN_TEST(test_get_empty_list);
+    RUN_TEST(test_get_from_index);
+
     return UNITY_END();
 }

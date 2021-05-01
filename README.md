@@ -26,6 +26,7 @@ typedef struct linked_list_interface_struct
     int (*count)(linked_list_td *list);
     void *(*get_first)(linked_list_td *list);
     void *(*get_last)(linked_list_td *list);
+    void *(*get_from_index)(linked_list_td *list, int index);
     void (*print)(linked_list_td *list);
 
 } linked_list_interface_td;
@@ -53,8 +54,17 @@ llist.prepend(&my_list, test_node, free);
 
 ### Get first and last entry.
 ```C
-int *test_first = llist.get_first(&my_list);
-int *test_last = llist.get_last(&my_list);
+list_node_td *list_node = llist.get_first(&my_list);
+int *test_first = list_node->data;
+
+list_node_td *list_node = llist.get_last(&my_list);
+int *test_last = list_node->data;
+```
+
+### Get node via index.
+```C
+list_node_td *list_node = llist.get_from_index(&my_list, 1);
+int *test_index = list_node->data;
 ```
 
 ### Remove first and last entry.
