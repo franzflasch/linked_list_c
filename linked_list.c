@@ -119,6 +119,20 @@ static void *linked_list_prepend(linked_list_td *list, void *node_data, void (*f
     return node;
 }
 
+static void *linked_list_append_item(linked_list_td *list, void *data, int size)
+{
+    void *tmp_data = malloc(size);
+    memcpy(tmp_data, data, size);
+    return linked_list_append(list, tmp_data, free);
+}
+
+static void *linked_list_prepend_item(linked_list_td *list, void *data, int size)
+{
+    void *tmp_data = malloc(size);
+    memcpy(tmp_data, data, size);
+    return linked_list_prepend(list, tmp_data, free);
+}
+
 static void linked_list_destroy(linked_list_td *list)
 {
     int i = 0;
@@ -165,6 +179,8 @@ linked_list_interface_td llist =
     .remove_last = linked_list_remove_last,
     .append = linked_list_append,
     .prepend = linked_list_prepend,
+    .append_item = linked_list_append_item,
+    .prepend_item = linked_list_prepend_item,
     .destroy = linked_list_destroy,
     .count = linked_list_count,
     .get_first = linked_list_get_first,

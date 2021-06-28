@@ -25,6 +25,8 @@ typedef struct linked_list_interface_struct
     void (*remove_last)(linked_list_td *list);
     void *(*append)(linked_list_td *list, void *node_data, void (*free_func)(void *data));
     void *(*prepend)(linked_list_td *list, void *node_data, void (*free_func)(void *data));
+    void *(*append_item)(linked_list_td *list, void *data, int size);
+    void *(*prepend_item)(linked_list_td *list, void *data, int size);
     void (*destroy)(linked_list_td *list);
     int (*count)(linked_list_td *list);
     void *(*get_first)(linked_list_td *list);

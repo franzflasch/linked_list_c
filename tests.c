@@ -591,6 +591,40 @@ void test_get_from_index(void)
     llist.destroy(&my_list);
 }
 
+void test_append_item(void)
+{
+    linked_list_td my_list = { 0 };
+
+    /* Now add one item and check */
+    llist.append_item(&my_list, &(int){123}, sizeof(int));
+    llist.append_item(&my_list, &(int){456}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+
+    list_node_td *list_node = llist.get_from_index(&my_list, 1);
+    int *tmp = list_node->data;
+
+    TEST_ASSERT_EQUAL(456, *tmp);
+
+    llist.destroy(&my_list);
+}
+
+void test_prepend_item(void)
+{
+    linked_list_td my_list = { 0 };
+
+    /* Now add one item and check */
+    llist.prepend_item(&my_list, &(int){123}, sizeof(int));
+    llist.prepend_item(&my_list, &(int){456}, sizeof(int));
+    llist.prepend_item(&my_list, &(int){789}, sizeof(int));
+
+    list_node_td *list_node = llist.get_from_index(&my_list, 0);
+    int *tmp = list_node->data;
+
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    llist.destroy(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -620,6 +654,8 @@ int main(void)
     RUN_TEST(test_append);
     RUN_TEST(test_get_empty_list);
     RUN_TEST(test_get_from_index);
+    RUN_TEST(test_append_item);
+    RUN_TEST(test_prepend_item);
 
     return UNITY_END();
 }

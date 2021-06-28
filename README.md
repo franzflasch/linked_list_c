@@ -45,11 +45,22 @@ int *test_node = calloc(1, sizeof(int));
 llist.append(&my_list, test_node, free);
 ```
 
+It is also possible to directly add an int into the list. Internally memory will be allocated and automatically freed, when
+the node is destroyed
+```C
+llist.append_item(&my_list, &(int){123}, sizeof(int));
+```
+
 ### Prepend an int to your list. Otherwise same as append.
 ```C
 int *test_node = calloc(1, sizeof(int));
 *test_node = 42;
 llist.prepend(&my_list, test_node, free);
+```
+
+Convenient prepending. Same as append_item
+```C
+llist.prepend_item(&my_list, &(int){123}, sizeof(int));
 ```
 
 ### Get first and last entry.
