@@ -63,6 +63,22 @@ static void *linked_list_get_from_index(linked_list_td *list, int index)
     return curr;
 }
 
+static void *linked_list_get_item_from_index(linked_list_td *list, int index)
+{
+    int i = 0;
+    list_node_td *curr = list->head;
+
+    if( (list->head == NULL) || ( index >= list->count))
+        return NULL;
+
+    for(i=0;i<index;i++)
+    {
+        curr = curr->next;
+    }
+
+    return curr->data;
+}
+
 static void linked_list_remove_front(linked_list_td *list)
 {
     linked_list_remove_entry(list, list->head);
@@ -186,5 +202,6 @@ linked_list_interface_td llist =
     .get_first = linked_list_get_first,
     .get_last = linked_list_get_last,
     .get_from_index = linked_list_get_from_index,
+    .get_item_from_index = linked_list_get_item_from_index,
     .print = linked_list_print,
 };

@@ -32,6 +32,7 @@ typedef struct linked_list_interface_struct
     void *(*get_first)(linked_list_td *list);
     void *(*get_last)(linked_list_td *list);
     void *(*get_from_index)(linked_list_td *list, int index);
+    void *(*get_item_from_index)(linked_list_td *list, int index);
     void (*print)(linked_list_td *list);
 
 } linked_list_interface_td;

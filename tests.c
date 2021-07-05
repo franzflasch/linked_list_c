@@ -591,6 +591,66 @@ void test_get_from_index(void)
     llist.destroy(&my_list);
 }
 
+void test_get_item_from_index(void)
+{
+    typedef struct my_test_data_struct
+    {
+        int x;
+        int y;
+        int blabla;
+
+    } my_test_data_td;
+
+    linked_list_td my_list = { 0 };
+
+    my_test_data_td test_node;
+    test_node.x = 42;
+    test_node.y = 43;
+    test_node.blabla = 44;
+    llist.append_item(&my_list, &test_node, sizeof(my_test_data_td));
+
+    test_node.x = 45;
+    test_node.y = 46;
+    test_node.blabla = 47;
+    llist.append_item(&my_list, &test_node, sizeof(my_test_data_td));
+
+    test_node.x = 48;
+    test_node.y = 49;
+    test_node.blabla = 50;
+    llist.append_item(&my_list, &test_node, sizeof(my_test_data_td));
+
+    test_node.x = 51;
+    test_node.y = 52;
+    test_node.blabla = 53;
+    llist.append_item(&my_list, &test_node, sizeof(my_test_data_td));
+
+    list_node_td *list_node = llist.get_from_index(&my_list, 2);
+    my_test_data_td *tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(48, tmp_data->x);
+    TEST_ASSERT_EQUAL(49, tmp_data->y);
+    TEST_ASSERT_EQUAL(50, tmp_data->blabla);
+
+    list_node = llist.get_from_index(&my_list, 1);
+    tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(45, tmp_data->x);
+    TEST_ASSERT_EQUAL(46, tmp_data->y);
+    TEST_ASSERT_EQUAL(47, tmp_data->blabla);
+
+    /* Now remove one node */
+    llist.remove_entry(&my_list, list_node);
+
+    /* The last node was deleted, so when now trying to get index 1 we should get the same data
+     * as we had when using index 2 before
+     */
+    list_node = llist.get_from_index(&my_list, 1);
+    tmp_data = list_node->data;
+    TEST_ASSERT_EQUAL(48, tmp_data->x);
+    TEST_ASSERT_EQUAL(49, tmp_data->y);
+    TEST_ASSERT_EQUAL(50, tmp_data->blabla);
+
+    llist.destroy(&my_list);
+}
+
 void test_append_item(void)
 {
     linked_list_td my_list = { 0 };
@@ -654,6 +714,7 @@ int main(void)
     RUN_TEST(test_append);
     RUN_TEST(test_get_empty_list);
     RUN_TEST(test_get_from_index);
+    RUN_TEST(test_get_item_from_index);
     RUN_TEST(test_append_item);
     RUN_TEST(test_prepend_item);
 

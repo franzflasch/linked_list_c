@@ -78,6 +78,11 @@ list_node_td *list_node = llist.get_from_index(&my_list, 1);
 int *test_index = list_node->data;
 ```
 
+### Get item via index.
+```C
+int *test_index = llist.get_item_from_index(&my_list, 1);
+```
+
 ### Remove first and last entry.
 ```C
 llist.remove_front(&my_list);
