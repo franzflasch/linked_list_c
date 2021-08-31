@@ -10,6 +10,7 @@ set(UNITY_SRCS "Unity/src/unity.c")
 ### linked list
 include_directories(".")
 set(LINKED_LIST_SRCS linked_list.c)
+add_library(${PROJECT_NAME} SHARED ${LINKED_LIST_SRCS})
 
 ### Example App
 set(EXAMPLE_SRCS main.c ${LINKED_LIST_SRCS})
