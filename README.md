@@ -106,6 +106,28 @@ llist.print(&my_list);
 llist.count(&my_list);
 ```
 
+### Sort a linked list in ascending order.
+```C
+llist.append_item(&my_list, &(int){999}, sizeof(int));
+llist.append_item(&my_list, &(int){123}, sizeof(int));
+llist.append_item(&my_list, &(int){789}, sizeof(int));
+llist.append_item(&my_list, &(int){1200}, sizeof(int));
+llist.append_item(&my_list, &(int){23}, sizeof(int));
+llist.append_item(&my_list, &(int){76}, sizeof(int));
+
+llist_bubble_sort_int(&my_list, 0);
+```
+
+### Remove duplicates.
+```C
+llist.append_item(&my_list, &(int){999}, sizeof(int));
+llist.append_item(&my_list, &(int){123}, sizeof(int));
+llist.append_item(&my_list, &(int){789}, sizeof(int));
+llist.append_item(&my_list, &(int){789}, sizeof(int));
+
+llist_uniq_int(&my_list_uniq, &my_list, sizeof(int), 0);
+```
+
 ## Example usage:
 
 ```C

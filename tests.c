@@ -685,6 +685,86 @@ void test_prepend_item(void)
     llist.destroy(&my_list);
 }
 
+void test_bubble_sort(void)
+{
+    linked_list_td my_list = { 0 };
+
+    /* Now add one item and check */
+    llist.append_item(&my_list, &(int){999}, sizeof(int));
+    llist.append_item(&my_list, &(int){123}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+    llist.append_item(&my_list, &(int){1200}, sizeof(int));
+    llist.append_item(&my_list, &(int){23}, sizeof(int));
+    llist.append_item(&my_list, &(int){76}, sizeof(int));
+
+    int *tmp = llist.get_item_from_index(&my_list, 0);
+    TEST_ASSERT_EQUAL(999, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 1);
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 2);
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    /* Now sort ascending */
+    llist_bubble_sort_int(&my_list, 0);
+
+    tmp = llist.get_item_from_index(&my_list, 0);
+    TEST_ASSERT_EQUAL(23, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 1);
+    TEST_ASSERT_EQUAL(76, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 2);
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    llist.destroy(&my_list);
+}
+
+void test_uniq(void)
+{
+    linked_list_td my_list = { 0 };
+    linked_list_td my_list_uniq = { 0 };
+
+    /* Now add one item and check */
+    llist.append_item(&my_list, &(int){999}, sizeof(int));
+    llist.append_item(&my_list, &(int){123}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+
+    int *tmp = llist.get_item_from_index(&my_list, 0);
+    TEST_ASSERT_EQUAL(999, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 1);
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 2);
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list, 3);
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    TEST_ASSERT_EQUAL(4, llist.count(&my_list));
+
+    /* Now sort ascending */
+    llist_uniq_int(&my_list_uniq, &my_list, sizeof(int), 0);
+
+    tmp = llist.get_item_from_index(&my_list_uniq, 0);
+    TEST_ASSERT_EQUAL(999, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list_uniq, 1);
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    tmp = llist.get_item_from_index(&my_list_uniq, 2);
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    /* The secont 789 should be removed now */
+    TEST_ASSERT_EQUAL(3, llist.count(&my_list_uniq));
+
+    llist.destroy(&my_list);
+    llist.destroy(&my_list_uniq);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -717,6 +797,8 @@ int main(void)
     RUN_TEST(test_get_item_from_index);
     RUN_TEST(test_append_item);
     RUN_TEST(test_prepend_item);
+    RUN_TEST(test_bubble_sort);
+    RUN_TEST(test_uniq);
 
     return UNITY_END();
 }
