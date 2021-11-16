@@ -359,8 +359,8 @@ void test_remove_all(void)
     llist.remove_front(&my_list);
     llist.remove_front(&my_list);
     TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
-    TEST_ASSERT_NULL(my_list.head)
-    TEST_ASSERT_NULL(my_list.tail)
+    TEST_ASSERT_NULL(my_list.head);
+    TEST_ASSERT_NULL(my_list.tail);
 
     llist.destroy(&my_list);
 }
@@ -421,8 +421,8 @@ void test_prepend(void)
     llist.remove_front(&my_list);
     llist.remove_front(&my_list);
     TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
-    TEST_ASSERT_NULL(my_list.head)
-    TEST_ASSERT_NULL(my_list.tail)
+    TEST_ASSERT_NULL(my_list.head);
+    TEST_ASSERT_NULL(my_list.tail);
 
     llist.destroy(&my_list);
 }
@@ -497,8 +497,8 @@ void test_append(void)
     llist.remove_front(&my_list);
     llist.remove_front(&my_list);
     TEST_ASSERT_EQUAL(my_list.head, my_list.tail);
-    TEST_ASSERT_NULL(my_list.head)
-    TEST_ASSERT_NULL(my_list.tail)
+    TEST_ASSERT_NULL(my_list.head);
+    TEST_ASSERT_NULL(my_list.tail);
 
     llist.destroy(&my_list);
 }
