@@ -31,6 +31,8 @@ typedef struct linked_list_interface_struct
     int (*count)(linked_list_td *list);
     void *(*get_first)(linked_list_td *list);
     void *(*get_last)(linked_list_td *list);
+    void *(*get_next)(linked_list_td *list, void *entry);
+    void *(*get_prev)(linked_list_td *list, void *entry);
     void *(*get_from_index)(linked_list_td *list, int index);
     void *(*get_item_from_index)(linked_list_td *list, int index);
     void (*print)(linked_list_td *list);

@@ -22,11 +22,16 @@ typedef struct linked_list_interface_struct
     void (*remove_last)(linked_list_td *list);
     void *(*append)(linked_list_td *list, void *node_data, void (*free_func)(void *data));
     void *(*prepend)(linked_list_td *list, void *node_data, void (*free_func)(void *data));
+    void *(*append_item)(linked_list_td *list, void *data, int size);
+    void *(*prepend_item)(linked_list_td *list, void *data, int size);
     void (*destroy)(linked_list_td *list);
     int (*count)(linked_list_td *list);
     void *(*get_first)(linked_list_td *list);
     void *(*get_last)(linked_list_td *list);
+    void *(*get_next)(linked_list_td *list, void *entry);
+    void *(*get_prev)(linked_list_td *list, void *entry);
     void *(*get_from_index)(linked_list_td *list, int index);
+    void *(*get_item_from_index)(linked_list_td *list, int index);
     void (*print)(linked_list_td *list);
 
 } linked_list_interface_td;
@@ -70,6 +75,20 @@ int *test_first = list_node->data;
 
 list_node_td *list_node = llist.get_last(&my_list);
 int *test_last = list_node->data;
+```
+
+### Get next node from current node.
+```C
+list_node_td *list_node = llist.get_first(&my_list);
+list_node_td *list_node_next = llist.get_next(&my_list, list_node);
+int *test_index = list_node_next->data;
+```
+
+### Get previous node from current node.
+```C
+list_node_td *list_node = llist.get_last(&my_list);
+list_node_td *list_node_prev = llist.get_prev(&my_list, list_node);
+int *test_index = list_node_prev->data;
 ```
 
 ### Get node via index.

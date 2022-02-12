@@ -765,6 +765,76 @@ void test_uniq(void)
     llist.destroy(&my_list_uniq);
 }
 
+void test_get_next(void)
+{
+    linked_list_td my_list = { 0 };
+    list_node_td *list_node = NULL;
+
+    /* Now add one item and check */
+    llist.append_item(&my_list, &(int){999}, sizeof(int));
+    llist.append_item(&my_list, &(int){123}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+
+    list_node = llist.get_first(&my_list);
+    int *tmp = list_node->data;
+    TEST_ASSERT_EQUAL(999, *tmp);
+
+    list_node = llist.get_next(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    list_node = llist.get_next(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    list_node = llist.get_next(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    TEST_ASSERT_EQUAL(4, llist.count(&my_list));
+
+    list_node = llist.get_next(&my_list, list_node);
+    TEST_ASSERT_EQUAL_PTR(NULL, list_node);
+
+    llist.destroy(&my_list);
+}
+
+void test_get_prev(void)
+{
+    linked_list_td my_list = { 0 };
+    list_node_td *list_node = NULL;
+
+    /* Now add one item and check */
+    llist.append_item(&my_list, &(int){999}, sizeof(int));
+    llist.append_item(&my_list, &(int){123}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+    llist.append_item(&my_list, &(int){789}, sizeof(int));
+
+    list_node = llist.get_last(&my_list);
+    int *tmp = list_node->data;
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    list_node = llist.get_prev(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(789, *tmp);
+
+    list_node = llist.get_prev(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(123, *tmp);
+
+    list_node = llist.get_prev(&my_list, list_node);
+    tmp = list_node->data;
+    TEST_ASSERT_EQUAL(999, *tmp);
+
+    TEST_ASSERT_EQUAL(4, llist.count(&my_list));
+
+    list_node = llist.get_prev(&my_list, list_node);
+    TEST_ASSERT_EQUAL_PTR(NULL, list_node);
+
+    llist.destroy(&my_list);
+}
+
 void setUp(void)
 {
     //printf("setUp\n");
@@ -799,6 +869,8 @@ int main(void)
     RUN_TEST(test_prepend_item);
     RUN_TEST(test_bubble_sort);
     RUN_TEST(test_uniq);
+    RUN_TEST(test_get_next);
+    RUN_TEST(test_get_prev);
 
     return UNITY_END();
 }

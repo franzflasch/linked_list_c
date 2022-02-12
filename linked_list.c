@@ -47,6 +47,34 @@ static void *linked_list_get_last(linked_list_td *list)
     return list->tail;
 }
 
+static void *linked_list_get_next(linked_list_td *list, void *entry)
+{
+    (void) list;
+    list_node_td *curr = entry;
+
+    if(entry == NULL)
+        return NULL;
+
+    if(curr->next == NULL)
+        return NULL;
+
+    return curr->next;
+}
+
+static void *linked_list_get_prev(linked_list_td *list, void *entry)
+{
+    (void) list;
+    list_node_td *curr = entry;
+
+    if(entry == NULL)
+        return NULL;
+
+    if(curr->prev == NULL)
+        return NULL;
+
+    return curr->prev;
+}
+
 static void *linked_list_get_from_index(linked_list_td *list, int index)
 {
     int i = 0;
@@ -201,6 +229,8 @@ linked_list_interface_td llist =
     .count = linked_list_count,
     .get_first = linked_list_get_first,
     .get_last = linked_list_get_last,
+    .get_next = linked_list_get_next,
+    .get_prev = linked_list_get_prev,
     .get_from_index = linked_list_get_from_index,
     .get_item_from_index = linked_list_get_item_from_index,
     .print = linked_list_print,
